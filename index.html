@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Doozy — Today</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="logo" href="index.html"><span class="logo-mark">d</span>Doozy</a>
+      <div class="tabs">
+        <a href="index.html" aria-current="page">Today</a>
+        <a href="week.html">Week</a>
+      </div>
+      <span class="date-chip" data-date-chip>Monday, November 16</span>
+    </nav>
+
+    <header class="hero">
+      <div>
+        <h1 data-greeting>Good morning.<br /><em>Let's get some wins.</em></h1>
+        <p data-summary><strong>4 things</strong> on your plate today. One of them is a tap that's been dripping since Sunday.</p>
+      </div>
+      <div class="card ring-card">
+        <div class="ring">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="50" fill="none" stroke-width="14" />
+            <circle class="ring-fg" data-ring cx="60" cy="60" r="50" fill="none" stroke-width="14" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="209.44" />
+          </svg>
+          <div class="ring-label" data-ring-label>2/6</div>
+        </div>
+        <div>
+          <p class="eyebrow">Streak</p>
+          <div class="streak-num" data-streak>🔥 12</div>
+          <div class="streak-sub">days in a row</div>
+        </div>
+      </div>
+    </header>
+
+    <form class="card quick" data-quick>
+      <span class="quick-plus" aria-hidden="true">+</span>
+      <input data-quick-input aria-label="Add a task" placeholder="Call mum tomorrow #home !!" autocomplete="off" />
+      <kbd>Enter</kbd>
+      <button class="btn primary" type="submit">Add it</button>
+    </form>
+    <div class="parse-preview" data-preview>
+      Try <kbd>#tag</kbd> <kbd>!!</kbd> for effort, and <kbd>tomorrow</kbd> or <kbd>fri</kbd> for when.
+    </div>
+
+    <div class="today-grid">
+      <main>
+        <section data-overdue-section>
+          <div class="list-head">
+            <h2>Left over</h2>
+            <span data-overdue-count>1 from yesterday</span>
+          </div>
+          <ul class="tasks" data-overdue></ul>
+        </section>
+
+        <section>
+          <div class="list-head">
+            <h2>Today</h2>
+            <span data-today-count>4 to go</span>
+          </div>
+          <ul class="tasks" data-today></ul>
+        </section>
+
+        <section>
+          <div class="list-head">
+            <h2>Done & dusted</h2>
+            <span data-done-count>2 crossed off</span>
+          </div>
+          <ul class="tasks" data-done></ul>
+        </section>
+      </main>
+
+      <aside class="side">
+        <div class="card focus">
+          <p class="eyebrow">Focus mode</p>
+          <p class="focus-title" data-focus-title>Send the Q4 deck to Priya</p>
+          <div class="timer" data-timer>25:00</div>
+          <div class="focus-actions">
+            <button class="btn lime" type="button" data-timer-toggle>Start</button>
+            <button class="btn ghost" type="button" data-timer-reset>Reset</button>
+            <button class="btn ghost" type="button" data-focus-next>Shuffle</button>
+          </div>
+        </div>
+
+        <div class="card tags-card">
+          <p class="eyebrow">Where your day goes</p>
+          <div data-tag-bars></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    let state = load();
+    let focusId = null;
+
+    function taskRow(t, overdue) {
+      return `
+        <li class="task ${t.done ? "done" : ""}" data-id="${t.id}">
+          <button class="check" type="button" aria-label="${t.done ? "Mark not done" : "Mark done"}: ${escapeHtml(t.title)}" data-toggle>${CHECK_SVG}</button>
+          <span class="task-title">${escapeHtml(t.title)}</span>
+          ${overdue ? '<span class="overdue">late</span>' : ""}
+          ${spiceDots(t.spice)}
+          ${tagChip(t.tag)}
+          <span class="actions">
+            ${t.done ? "" : '<button class="icon-btn" type="button" data-focus>Focus</button>'}
+            ${t.done ? "" : '<button class="icon-btn" type="button" data-snooze>Tomorrow →</button>'}
+            <button class="icon-btn" type="button" data-delete aria-label="Delete">✕</button>
+          </span>
+        </li>`;
+    }
+
+    function render() {
+      const today = todayIso();
+      const todays = state.tasks.filter((t) => t.date === today);
+      const overdue = state.tasks.filter((t) => t.date && t.date < today && !t.done);
+      const open = todays.filter((t) => !t.done);
+      const done = todays.filter((t) => t.done);
+
+      document.querySelector("[data-overdue]").innerHTML = overdue.map((t) => taskRow(t, true)).join("");
+      document.querySelector("[data-overdue-section]").hidden = overdue.length === 0;
+      document.querySelector("[data-overdue-count]").textContent = `${overdue.length} carried over`;
+
+      document.querySelector("[data-today]").innerHTML = open.length
+        ? open.map((t) => taskRow(t)).join("")
+        : '<li class="empty">Clear plate. Go outside, or steal something from the week.</li>';
+      document.querySelector("[data-today-count]").textContent = `${open.length} to go`;
+
+      document.querySelector("[data-done]").innerHTML = done.length
+        ? done.map((t) => taskRow(t)).join("")
+        : '<li class="empty">Nothing yet. The first one is the hardest.</li>';
+      document.querySelector("[data-done-count]").textContent = `${done.length} crossed off`;
+
+      const total = todays.length || 1;
+      const ratio = done.length / total;
+      document.querySelector("[data-ring]").style.strokeDashoffset = 314.16 * (1 - ratio);
+      document.querySelector("[data-ring-label]").textContent = `${done.length}/${todays.length}`;
+      document.querySelector("[data-streak]").textContent = `🔥 ${streak(state)}`;
+
+      const hour = new Date().getHours();
+      const hello = hour < 12 ? "Good morning." : hour < 18 ? "Good afternoon." : "Good evening.";
+      const line = open.length === 0 && todays.length ? "<em>You cleared it all.</em>" : "<em>Let's get some wins.</em>";
+      document.querySelector("[data-greeting]").innerHTML = `${hello}<br />${line}`;
+      const heavy = open.filter((t) => t.spice === 3).length;
+      document.querySelector("[data-summary]").innerHTML = open.length
+        ? `<strong>${open.length} thing${open.length === 1 ? "" : "s"}</strong> on your plate today${heavy ? `, ${heavy} of them spicy` : ""}. ${overdue.length ? `Plus ${overdue.length} left over from before.` : "Nothing left over. Nice."}`
+        : "Everything's done. Take the rest of the day back.";
+
+      const counts = {};
+      todays.concat(overdue).forEach((t) => (counts[t.tag] = (counts[t.tag] || 0) + 1));
+      const max = Math.max(1, ...Object.values(counts));
+      document.querySelector("[data-tag-bars]").innerHTML = Object.keys(TAGS)
+        .map(
+          (tag) => `
+          <div class="bar-row">
+            <span>#${tag}</span>
+            <div class="bar"><i style="width:${((counts[tag] || 0) / max) * 100}%;background:${TAGS[tag]}"></i></div>
+            <b>${counts[tag] || 0}</b>
+          </div>`
+        )
+        .join("");
+
+      const focusable = open.concat(overdue);
+      if (!focusable.find((t) => t.id === focusId)) {
+        focusId = (focusable.slice().sort((a, b) => b.spice - a.spice)[0] || {}).id || null;
+      }
+      const ft = state.tasks.find((t) => t.id === focusId);
+      document.querySelector("[data-focus-title]").textContent = ft ? ft.title : "Nothing to focus on. Enjoy it.";
+    }
+
+    function update(fn) {
+      fn();
+      save(state);
+      render();
+    }
+
+    document.addEventListener("click", (e) => {
+      const row = e.target.closest(".task");
+      if (!row) return;
+      const t = state.tasks.find((x) => x.id === row.dataset.id);
+      if (!t) return;
+      if (e.target.closest("[data-toggle]")) {
+        if (!t.done) cheer({ currentTarget: e.target.closest("[data-toggle]") });
+        update(() => {
+          t.done = !t.done;
+          if (t.done && t.date < todayIso()) t.date = todayIso();
+        });
+      } else if (e.target.closest("[data-snooze]")) {
+        update(() => (t.date = iso(addDays(new Date(), 1))));
+        toast("Pushed to tomorrow. No judgement.");
+      } else if (e.target.closest("[data-delete]")) {
+        update(() => (state.tasks = state.tasks.filter((x) => x.id !== t.id)));
+      } else if (e.target.closest("[data-focus]")) {
+        focusId = t.id;
+        render();
+      }
+    });
+
+    const input = document.querySelector("[data-quick-input]");
+    const preview = document.querySelector("[data-preview]");
+    const previewDefault = preview.innerHTML;
+
+    input.addEventListener("input", () => {
+      if (!input.value.trim()) return (preview.innerHTML = previewDefault);
+      const p = parseQuick(input.value);
+      preview.innerHTML = `Will add <strong style="color:var(--ink)">“${escapeHtml(p.title || "…")}”</strong> ${tagChip(p.tag)} ${spiceDots(p.spice)} <span class="tag">${p.when}</span>`;
+    });
+
+    document.querySelector("[data-quick]").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const p = parseQuick(input.value);
+      if (!p.title) return;
+      update(() =>
+        state.tasks.push({ id: `t${Date.now()}`, title: p.title, tag: p.tag, spice: p.spice, date: p.date, done: false })
+      );
+      input.value = "";
+      preview.innerHTML = previewDefault;
+      toast(p.date === todayIso() ? "Added to today." : p.date ? `Scheduled for ${p.when}.` : "Tossed in Someday.");
+    });
+
+    let remaining = 25 * 60;
+    let tick = null;
+    const timerEl = document.querySelector("[data-timer]");
+    const toggleBtn = document.querySelector("[data-timer-toggle]");
+    const paint = () =>
+      (timerEl.textContent = `${String(Math.floor(remaining / 60)).padStart(2, "0")}:${String(remaining % 60).padStart(2, "0")}`);
+    const stop = () => {
+      clearInterval(tick);
+      tick = null;
+      toggleBtn.textContent = "Start";
+    };
+
+    toggleBtn.addEventListener("click", () => {
+      if (tick) return stop();
+      toggleBtn.textContent = "Pause";
+      tick = setInterval(() => {
+        remaining--;
+        paint();
+        if (remaining <= 0) {
+          stop();
+          remaining = 25 * 60;
+          paint();
+          toast("Focus session done. Stretch a bit.");
+        }
+      }, 1000);
+    });
+
+    document.querySelector("[data-timer-reset]").addEventListener("click", () => {
+      stop();
+      remaining = 25 * 60;
+      paint();
+    });
+
+    document.querySelector("[data-focus-next]").addEventListener("click", () => {
+      const pool = state.tasks.filter((t) => !t.done && t.date && t.date <= todayIso() && t.id !== focusId);
+      if (pool.length) focusId = pool[Math.floor(Math.random() * pool.length)].id;
+      render();
+    });
+
+    setDateChip();
+    render();
+  </script>
+</body>
+</html>

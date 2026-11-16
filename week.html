@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Doozy — Week</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="logo" href="index.html"><span class="logo-mark">d</span>Doozy</a>
+      <div class="tabs">
+        <a href="index.html">Today</a>
+        <a href="week.html" aria-current="page">Week</a>
+      </div>
+      <span class="date-chip" data-date-chip>Monday, November 16</span>
+    </nav>
+
+    <header class="week-head">
+      <div>
+        <h1>The week, <em>at a glance.</em></h1>
+        <p data-week-summary>14 tasks across 7 days. Drag cards between days to rebalance.</p>
+      </div>
+      <div class="week-nav">
+        <button class="btn" type="button" data-prev aria-label="Previous week">←</button>
+        <button class="btn" type="button" data-this-week>This week</button>
+        <button class="btn" type="button" data-next aria-label="Next week">→</button>
+      </div>
+    </header>
+
+    <section class="board" data-board></section>
+
+    <section class="card someday" data-drop="someday">
+      <div class="someday-head">
+        <h2>Someday pile</h2>
+        <span>Drag one onto a day when you're feeling brave.</span>
+      </div>
+      <ul class="mini-list" data-someday></ul>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    let state = load();
+    let weekStart = startOfWeek(new Date());
+
+    function miniCard(t, i) {
+      const tilt = t.date ? 0 : ((i % 3) - 1) * 1.2;
+      return `
+        <li class="mini ${t.done ? "done" : ""}" draggable="true" data-id="${t.id}" style="--tilt:${tilt}deg">
+          <div class="mini-top">
+            <button class="check" type="button" aria-label="Toggle ${escapeHtml(t.title)}" data-toggle>${CHECK_SVG}</button>
+            <span>${escapeHtml(t.title)}</span>
+          </div>
+          ${tagChip(t.tag)}
+        </li>`;
+    }
+
+    function render() {
+      const today = todayIso();
+      const days = [...Array(7)].map((_, i) => addDays(weekStart, i));
+      const weekIsos = days.map(iso);
+      const inWeek = state.tasks.filter((t) => weekIsos.includes(t.date));
+      const maxLoad = Math.max(4, ...weekIsos.map((d) => inWeek.filter((t) => t.date === d).reduce((s, t) => s + t.spice, 0)));
+
+      document.querySelector("[data-board]").innerHTML = days
+        .map((d) => {
+          const di = iso(d);
+          const items = inWeek.filter((t) => t.date === di).sort((a, b) => a.done - b.done);
+          const load = items.filter((t) => !t.done).reduce((s, t) => s + t.spice, 0);
+          const cls = di === today ? "today" : di < today ? "past" : "";
+          return `
+            <div class="day ${cls}" data-drop="${di}">
+              <div class="day-head">
+                <span class="day-name">${di === today ? "Today" : DAY_NAMES[d.getDay()]}</span>
+                <span class="day-date">${d.getDate()}</span>
+              </div>
+              <div class="load" title="Effort load"><i style="width:${(load / maxLoad) * 100}%"></i></div>
+              <ul class="mini-list">${items.map(miniCard).join("")}</ul>
+              <input class="add-inline" data-add="${di}" placeholder="+ Add" aria-label="Add task on ${d.toDateString()}" />
+            </div>`;
+        })
+        .join("");
+
+      const someday = state.tasks.filter((t) => !t.date);
+      document.querySelector("[data-someday]").innerHTML = someday.map(miniCard).join("");
+
+      const open = inWeek.filter((t) => !t.done).length;
+      const busiest = days
+        .map((d) => ({ d, n: inWeek.filter((t) => t.date === iso(d) && !t.done).length }))
+        .sort((a, b) => b.n - a.n)[0];
+      document.querySelector("[data-week-summary]").textContent =
+        `${inWeek.length} tasks this week, ${open} still open. ` +
+        (busiest && busiest.n ? `${busiest.d.toLocaleDateString("en-US", { weekday: "long" })} is looking busiest — drag cards to rebalance.` : "Wide open. Drag something in from Someday.");
+    }
+
+    function update(fn) {
+      fn();
+      save(state);
+      render();
+    }
+
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-toggle]");
+      if (!btn) return;
+      const t = state.tasks.find((x) => x.id === btn.closest(".mini").dataset.id);
+      if (!t.done) cheer({ currentTarget: btn });
+      update(() => (t.done = !t.done));
+    });
+
+    document.addEventListener("keydown", (e) => {
+      const input = e.target.closest("[data-add]");
+      if (!input || e.key !== "Enter" || !input.value.trim()) return;
+      const p = parseQuick(input.value);
+      const date = input.dataset.add;
+      update(() => state.tasks.push({ id: `t${Date.now()}`, title: p.title, tag: p.tag, spice: p.spice, date, done: false }));
+      const again = document.querySelector(`[data-add="${date}"]`);
+      if (again) again.focus();
+    });
+
+    let dragId = null;
+    document.addEventListener("dragstart", (e) => {
+      const card = e.target.closest(".mini");
+      if (!card) return;
+      dragId = card.dataset.id;
+      card.classList.add("dragging");
+      e.dataTransfer.effectAllowed = "move";
+    });
+    document.addEventListener("dragend", () => {
+      document.querySelectorAll(".dragging, .drag-over").forEach((el) => el.classList.remove("dragging", "drag-over"));
+      dragId = null;
+    });
+    document.addEventListener("dragover", (e) => {
+      const zone = e.target.closest("[data-drop]");
+      if (!zone || !dragId) return;
+      e.preventDefault();
+      document.querySelectorAll(".drag-over").forEach((el) => el !== zone && el.classList.remove("drag-over"));
+      zone.classList.add("drag-over");
+    });
+    document.addEventListener("drop", (e) => {
+      const zone = e.target.closest("[data-drop]");
+      if (!zone || !dragId) return;
+      e.preventDefault();
+      const t = state.tasks.find((x) => x.id === dragId);
+      const target = zone.dataset.drop === "someday" ? null : zone.dataset.drop;
+      if (t.date === target) return;
+      update(() => (t.date = target));
+      toast(target ? `Moved to ${fromIso(target).toLocaleDateString("en-US", { weekday: "long" })}.` : "Back to Someday.");
+    });
+
+    document.querySelector("[data-prev]").addEventListener("click", () => ((weekStart = addDays(weekStart, -7)), render()));
+    document.querySelector("[data-next]").addEventListener("click", () => ((weekStart = addDays(weekStart, 7)), render()));
+    document.querySelector("[data-this-week]").addEventListener("click", () => ((weekStart = startOfWeek(new Date())), render()));
+
+    setDateChip();
+    render();
+  </script>
+</body>
+</html>

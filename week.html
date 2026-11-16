@@ -16,7 +16,6 @@
       <div class="tabs">
         <a href="index.html">Today</a>
         <a href="week.html" aria-current="page">Week</a>
-        <a href="wins.html">Wins</a>
       </div>
       <span class="date-chip" data-date-chip>Monday, November 16</span>
     </nav>
@@ -24,7 +23,7 @@
     <header class="week-head">
       <div>
         <h1>The week, <em>at a glance.</em></h1>
-        <p data-week-summary>14 tasks across 7 days. Drag cards between days to rebalance.</p>
+        <p data-week-summary>13 tasks this week, 11 still open. Monday is looking busiest — drag cards to rebalance.</p>
       </div>
       <div class="week-nav">
         <button class="btn" type="button" data-prev aria-label="Previous week">←</button>
@@ -33,15 +32,229 @@
       </div>
     </header>
 
-    <section class="board" data-board></section>
+    <div class="week-layout">
+      <section class="agenda" data-board>
+        <div class="day today" data-drop="2026-11-16">
+          <div class="day-label">
+            <div class="day-head">
+              <span class="day-name">Today</span>
+              <span class="day-date">16</span>
+            </div>
+            <div class="load" title="Effort load"><i style="width:70%"></i></div>
+          </div>
+          <div class="day-body">
+            <ul class="mini-list">
+            <li class="mini " draggable="true" data-id="t1" style="--tilt:0deg">
+              <div class="mini-top">
+                <button class="check" type="button" aria-label="Toggle Send the Q4 deck to Priya" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <span>Send the Q4 deck to Priya</span>
+              </div>
+              <span class="tag" style="background:var(--sky)">#work</span>
+            </li>
+            <li class="mini " draggable="true" data-id="t2" style="--tilt:0deg">
+              <div class="mini-top">
+                <button class="check" type="button" aria-label="Toggle Book a dentist appointment" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <span>Book a dentist appointment</span>
+              </div>
+              <span class="tag" style="background:var(--butter)">#health</span>
+            </li>
+            <li class="mini " draggable="true" data-id="t3" style="--tilt:0deg">
+              <div class="mini-top">
+                <button class="check" type="button" aria-label="Toggle Water the monstera (it&#39;s sulking)" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <span>Water the monstera (it&#39;s sulking)</span>
+              </div>
+              <span class="tag" style="background:var(--peach)">#home</span>
+            </li>
+            <li class="mini " draggable="true" data-id="t4" style="--tilt:0deg">
+              <div class="mini-top">
+                <button class="check" type="button" aria-label="Toggle Pick up oat milk + lemons" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <span>Pick up oat milk + lemons</span>
+              </div>
+              <span class="tag" style="background:var(--lime)">#errand</span>
+            </li>
+            <li class="mini done" draggable="true" data-id="t5" style="--tilt:0deg">
+              <div class="mini-top">
+                <button class="check" type="button" aria-label="Toggle 30 min run along the canal" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <span>30 min run along the canal</span>
+              </div>
+              <span class="tag" style="background:var(--butter)">#health</span>
+            </li>
+            <li class="mini done" draggable="true" data-id="t6" style="--tilt:0deg">
+              <div class="mini-top">
+                <button class="check" type="button" aria-label="Toggle Reply to Sam about the cabin weekend" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <span>Reply to Sam about the cabin weekend</span>
+              </div>
+              <span class="tag" style="background:var(--lilac)">#fun</span>
+            </li>
+            </ul>
+            <input class="add-inline" data-add="2026-11-16" placeholder="+ Add" aria-label="Add task on Mon Nov 16 2026" />
+          </div>
+        </div>
+        <div class="day " data-drop="2026-11-17">
+          <div class="day-label">
+            <div class="day-head">
+              <span class="day-name">tue</span>
+              <span class="day-date">17</span>
+            </div>
+            <div class="load" title="Effort load"><i style="width:30%"></i></div>
+          </div>
+          <div class="day-body">
+            <ul class="mini-list">
+            <li class="mini " draggable="true" data-id="t9" style="--tilt:0deg">
+              <div class="mini-top">
+                <button class="check" type="button" aria-label="Toggle Draft the newsletter intro" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <span>Draft the newsletter intro</span>
+              </div>
+              <span class="tag" style="background:var(--sky)">#work</span>
+            </li>
+            <li class="mini " draggable="true" data-id="t10" style="--tilt:0deg">
+              <div class="mini-top">
+                <button class="check" type="button" aria-label="Toggle Return the library books" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <span>Return the library books</span>
+              </div>
+              <span class="tag" style="background:var(--lime)">#errand</span>
+            </li>
+            </ul>
+            <input class="add-inline" data-add="2026-11-17" placeholder="+ Add" aria-label="Add task on Tue Nov 17 2026" />
+          </div>
+        </div>
+        <div class="day " data-drop="2026-11-18">
+          <div class="day-label">
+            <div class="day-head">
+              <span class="day-name">wed</span>
+              <span class="day-date">18</span>
+            </div>
+            <div class="load" title="Effort load"><i style="width:30%"></i></div>
+          </div>
+          <div class="day-body">
+            <ul class="mini-list">
+            <li class="mini " draggable="true" data-id="t11" style="--tilt:0deg">
+              <div class="mini-top">
+                <button class="check" type="button" aria-label="Toggle Yoga class at 7" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <span>Yoga class at 7</span>
+              </div>
+              <span class="tag" style="background:var(--butter)">#health</span>
+            </li>
+            <li class="mini " draggable="true" data-id="t12" style="--tilt:0deg">
+              <div class="mini-top">
+                <button class="check" type="button" aria-label="Toggle 1:1 with Mara" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <span>1:1 with Mara</span>
+              </div>
+              <span class="tag" style="background:var(--sky)">#work</span>
+            </li>
+            </ul>
+            <input class="add-inline" data-add="2026-11-18" placeholder="+ Add" aria-label="Add task on Wed Nov 18 2026" />
+          </div>
+        </div>
+        <div class="day " data-drop="2026-11-19">
+          <div class="day-label">
+            <div class="day-head">
+              <span class="day-name">thu</span>
+              <span class="day-date">19</span>
+            </div>
+            <div class="load" title="Effort load"><i style="width:50%"></i></div>
+          </div>
+          <div class="day-body">
+            <ul class="mini-list">
+            <li class="mini " draggable="true" data-id="t13" style="--tilt:0deg">
+              <div class="mini-top">
+                <button class="check" type="button" aria-label="Toggle Plan Saturday&#39;s dinner party" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <span>Plan Saturday&#39;s dinner party</span>
+              </div>
+              <span class="tag" style="background:var(--lilac)">#fun</span>
+            </li>
+            <li class="mini " draggable="true" data-id="t14" style="--tilt:0deg">
+              <div class="mini-top">
+                <button class="check" type="button" aria-label="Toggle Pay the electricity bill" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <span>Pay the electricity bill</span>
+              </div>
+              <span class="tag" style="background:var(--peach)">#home</span>
+            </li>
+            </ul>
+            <input class="add-inline" data-add="2026-11-19" placeholder="+ Add" aria-label="Add task on Thu Nov 19 2026" />
+          </div>
+        </div>
+        <div class="day " data-drop="2026-11-20">
+          <div class="day-label">
+            <div class="day-head">
+              <span class="day-name">fri</span>
+              <span class="day-date">20</span>
+            </div>
+            <div class="load" title="Effort load"><i style="width:0%"></i></div>
+          </div>
+          <div class="day-body">
+            <ul class="mini-list">
+            </ul>
+            <input class="add-inline" data-add="2026-11-20" placeholder="+ Add" aria-label="Add task on Fri Nov 20 2026" />
+          </div>
+        </div>
+        <div class="day " data-drop="2026-11-21">
+          <div class="day-label">
+            <div class="day-head">
+              <span class="day-name">sat</span>
+              <span class="day-date">21</span>
+            </div>
+            <div class="load" title="Effort load"><i style="width:10%"></i></div>
+          </div>
+          <div class="day-body">
+            <ul class="mini-list">
+            <li class="mini " draggable="true" data-id="t15" style="--tilt:0deg">
+              <div class="mini-top">
+                <button class="check" type="button" aria-label="Toggle Farmers market" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <span>Farmers market</span>
+              </div>
+              <span class="tag" style="background:var(--lime)">#errand</span>
+            </li>
+            </ul>
+            <input class="add-inline" data-add="2026-11-21" placeholder="+ Add" aria-label="Add task on Sat Nov 21 2026" />
+          </div>
+        </div>
+        <div class="day " data-drop="2026-11-22">
+          <div class="day-label">
+            <div class="day-head">
+              <span class="day-name">sun</span>
+              <span class="day-date">22</span>
+            </div>
+            <div class="load" title="Effort load"><i style="width:0%"></i></div>
+          </div>
+          <div class="day-body">
+            <ul class="mini-list">
+            </ul>
+            <input class="add-inline" data-add="2026-11-22" placeholder="+ Add" aria-label="Add task on Sun Nov 22 2026" />
+          </div>
+        </div>
+      </section>
 
-    <section class="card someday" data-drop="someday">
-      <div class="someday-head">
-        <h2>Someday pile</h2>
-        <span>Drag one onto a day when you're feeling brave.</span>
-      </div>
-      <ul class="mini-list" data-someday></ul>
-    </section>
+      <aside class="card someday" data-drop="someday">
+        <div class="someday-head">
+          <h2>Someday pile</h2>
+          <span>Drag one onto a day when you're feeling brave.</span>
+        </div>
+        <ul class="mini-list" data-someday>
+          <li class="mini " draggable="true" data-id="t16" style="--tilt:-1.2deg">
+            <div class="mini-top">
+              <button class="check" type="button" aria-label="Toggle Learn three chords on the ukulele" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span>Learn three chords on the ukulele</span>
+            </div>
+            <span class="tag" style="background:var(--lilac)">#fun</span>
+          </li>
+          <li class="mini " draggable="true" data-id="t17" style="--tilt:0deg">
+            <div class="mini-top">
+              <button class="check" type="button" aria-label="Toggle Repaint the hallway" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span>Repaint the hallway</span>
+            </div>
+            <span class="tag" style="background:var(--peach)">#home</span>
+          </li>
+          <li class="mini " draggable="true" data-id="t18" style="--tilt:1.2deg">
+            <div class="mini-top">
+              <button class="check" type="button" aria-label="Toggle Try that ramen place on 5th" data-toggle><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span>Try that ramen place on 5th</span>
+            </div>
+            <span class="tag" style="background:var(--lilac)">#fun</span>
+          </li>
+        </ul>
+      </aside>
+    </div>
   </div>
 
   <script src="app.js"></script>
@@ -76,13 +289,17 @@
           const cls = di === today ? "today" : di < today ? "past" : "";
           return `
             <div class="day ${cls}" data-drop="${di}">
-              <div class="day-head">
-                <span class="day-name">${di === today ? "Today" : DAY_NAMES[d.getDay()]}</span>
-                <span class="day-date">${d.getDate()}</span>
+              <div class="day-label">
+                <div class="day-head">
+                  <span class="day-name">${di === today ? "Today" : DAY_NAMES[d.getDay()]}</span>
+                  <span class="day-date">${d.getDate()}</span>
+                </div>
+                <div class="load" title="Effort load"><i style="width:${(load / maxLoad) * 100}%"></i></div>
               </div>
-              <div class="load" title="Effort load"><i style="width:${(load / maxLoad) * 100}%"></i></div>
-              <ul class="mini-list">${items.map(miniCard).join("")}</ul>
-              <input class="add-inline" data-add="${di}" placeholder="+ Add" aria-label="Add task on ${d.toDateString()}" />
+              <div class="day-body">
+                <ul class="mini-list">${items.map(miniCard).join("")}</ul>
+                <input class="add-inline" data-add="${di}" placeholder="+ Add" aria-label="Add task on ${d.toDateString()}" />
+              </div>
             </div>`;
         })
         .join("");
